@@ -1,73 +1,82 @@
-
-
 package com.bridgelab;
-
-import java.util.Random;
-
-
-
-import java.util.Random;
 
 public class EmpWage {
 
-    public static final int IS_FULL_TIME = 1;
-    public static final int IS_PART_TIME = 2;
+    // class constants
+    static final int PART_TIME = 1;
+    static final int FULL_TIME = 2;
+    // instance constants
+    final String COMPANY_NAME;
+    final int WAGE_PER_HR;
+    final int MAX_WORKING_DAYS;
+    final int MAX_WORKING_HRS;
+    // instance variable
+    int totalWage;
 
-    private final String company;
-    private final int empRatePerHour;
-    private final int numOfWorkingDays;
-    private final int maxWorkingHoursPerMonth;
-    private int totalEmpWage;
+    EmpWage(String companyName, int wagePerHr, int maxWorkingDays, int maxWorkingHrs) {
 
-    public EmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxWorkingHoursPerMonth) {
-        this.company = company;
-        this.empRatePerHour = empRatePerHour;
-        this.numOfWorkingDays = numOfWorkingDays;
-        this.maxWorkingHoursPerMonth = maxWorkingHoursPerMonth;
+        COMPANY_NAME = companyName;
+        WAGE_PER_HR = wagePerHr;
+        MAX_WORKING_DAYS = maxWorkingDays;
+        MAX_WORKING_HRS = maxWorkingHrs;
+        totalWage = 0;
     }
 
-    public void computeWage() {
-        int empHours = 0;
-        int total_empHrs = 0;
-        int totalWorkingDay = 0;
+    int generateEmployeeType()
+    {
+        return (int) (Math.random() * 100) % 3;
+    }
 
-        while (total_empHrs <= maxWorkingHoursPerMonth && totalWorkingDay < numOfWorkingDays) {
-            totalWorkingDay++;
-            int empCheck = (int) Math.floor(Math.random() * 10) % 3;
-            switch (empCheck) {
-                case IS_FULL_TIME:
-                    empHours = 8;
-                    System.out.println("Employee is Present");
-                    break;
-                case IS_PART_TIME:
-                    System.out.println("Employee is Part Time");
-                    empHours = 4;
-                    break;
-                default:
-                    empHours = 0;
-
-                    System.out.println("Employee is Absent");
-            }
-            total_empHrs += empHours;
+    int getWorkingHrs(int empType)
+    {
+        switch (empType)
+        {
+            case FULL_TIME:
+                return 8;
+            case PART_TIME:
+                return 4;
+            default:
+                return 0;
         }
-        totalEmpWage = total_empHrs * empRatePerHour;
     }
 
-    @Override
+    void calculateTotalWage() {
+        
+        System.out.println("Computation of total wage of " + COMPANY_NAME + " employee");
+        System.out.println("-----------------------------------------------------");
+        System.out.printf("%5s     %5s     %5s     %5s\n", "Day", "Workinghrs", "Wage", "Total working hrs");
+        int workingHrs;
+
+        for (int day = 1, totalWorkingHrs = 0; day <= MAX_WORKING_DAYS
+                && totalWorkingHrs <= MAX_WORKING_HRS; day++, totalWorkingHrs += workingHrs) {
+
+            int empType = generateEmployeeType();
+            workingHrs = getWorkingHrs(empType);
+            int wage = workingHrs * WAGE_PER_HR;
+            totalWage += wage;
+            System.out.printf("%5d       %5d      %5d      %5d\n", day, workingHrs, wage, totalWorkingHrs + workingHrs);
+        }
+
+    }
+
     public String toString() {
-        return "Total Emp wage for company : " + company + " is " + totalEmpWage;
+        System.out.println("Details of " + COMPANY_NAME + " employee");
+        System.out.println("-----------------------------------------------------");
+        System.err.println("Wage per hour:" + WAGE_PER_HR);
+        System.out.println("Maximum working days:" + MAX_WORKING_DAYS);
+        System.out.println("Maximum working hours:" + MAX_WORKING_HRS);
+        return "Total wage for a month of " + COMPANY_NAME + " employee is " + totalWage + "\n";
     }
 
-    public static void main(String[] args) {
+    public static void main(String args[]) {
 
+        EmpWage google = new EmpWage("Google", 8, 20, 100);
+        EmpWage microsoft = new EmpWage("Microsoft", 4, 30, 150);
 
-        EmpWage bridgeLabz = new EmpWage("BridgeLabz", 45, 30, 70);
-        EmpWage infosys = new EmpWage("Infosys", 35, 45, 90);
-        bridgeLabz.computeWage();
-        System.out.println(bridgeLabz);
-        infosys.computeWage();
-        System.out.println(infosys);
+        google.calculateTotalWage();
+        System.out.println(google);
 
+        microsoft.calculateTotalWage();
+        System.out.println(microsoft);
     }
-
 }
