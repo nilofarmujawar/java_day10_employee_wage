@@ -3,11 +3,12 @@ package com.bridgelab;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//interface
 interface IEmployeeWageComputation {
 
     public void addCompany(String companyName, int wagePerHr, int maxWorkingDays, int maxWorkingHrs);
 
-    public void calculateTotalWage();
+    public void calculateTotalWage(); //interface method
 
     public int getTotalEmpWage(String companyName);
 }
@@ -48,6 +49,7 @@ class CompanyEmpWage {
     }
 }
 
+// Empwage implements the IEmployeeWageComputation interface
 class EmpWage implements IEmployeeWageComputation {
 
     // class constants
